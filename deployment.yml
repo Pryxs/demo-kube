@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-deployment
+spec:
+  selector:
+    matchLabels:
+      app: demo-project
+  template:
+    metadata:
+      labels:
+        app: demo-project
+
+    spec:
+      imagePullSecrets:
+        - name: ghcr
+      containers:
+        - name: demo-container
+          image: ghcr.io/pryxs/demo-project:latest
+
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
