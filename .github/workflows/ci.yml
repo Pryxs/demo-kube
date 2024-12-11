@@ -30,5 +30,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/alexandretrichot/demo-project:${{ github.run_number }}
-            ghcr.io/alexandretrichot/demo-project:latest
+            ghcr.io/pryxs/demo-project:${{ github.run_number }}
+            ghcr.io/pryxs/demo-project:latest
