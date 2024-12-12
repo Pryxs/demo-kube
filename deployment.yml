@@ -17,6 +17,9 @@ spec:
       containers:
         - name: demo-container
           image: ghcr.io/pryxs/demo-project:latest
+          ports:
+            - name : http
+              containerPort: 3000
 
           resources:
             requests:
@@ -25,3 +28,43 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-project
+spec:
+  selector:
+    app: demo-project
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 3000
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo-project
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: demo-project.corentin.internal-dev.oppus.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: demo-project
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - demo-project.corentin.internal-dev.oppus.dev
+      secretName: demo-project-tls
